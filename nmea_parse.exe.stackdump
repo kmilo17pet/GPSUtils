@@ -1,0 +1,10 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=61145FDB
+eax=0028D404 ebx=0028AC5C ecx=00000030 edx=00000030 esi=00000000 edi=0028CD84
+ebp=0028ABF8 esp=0028AAA0 program=C:\Users\colcircuitos\Documents\NetBeansProjects\nmea_parse\dist\Debug\Cygwin_4.x-Windows\nmea_parse.exe, pid 4152, thread main
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+0028ABF8  61145FDB (00405100, 00405140, 6119FF5B, 61124F7F)
+0028AC38  00402382 (00000001, 0028AC5C, 80010100, 61007F58)
+0028ACF8  61007FB5 (00000000, 0028CD84, 61007120, 00000000)
+End of stack trace
