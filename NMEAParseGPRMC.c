@@ -81,7 +81,10 @@ int ParseNMEAFrameGPRMC(GPRMCInfoIndex_t *obj,  const char *buffer){
     char *ptrend=NULL;
     int FrameSize=0;
     ptrinit=strstr(buffer,"$GPRMC,");
-    if (ptrinit==NULL) return -1;
+    if (ptrinit==NULL){ 
+        ptrinit=strstr(buffer,"$GNRMC,");
+        if(ptrinit==NULL) return -1;
+    }
     ptrend=strstr(ptrinit,"*");
     if (ptrend!=NULL){
         int i;
