@@ -1,7 +1,7 @@
 /* 
  * File:   PostitionCoordinatesTransformatios.h
  * Author: Ing. Juan Camilo Gomez Cadavid MSc.
- * I write this fuck#?!%&! transformation for long-term 2D localization correction
+ * I write this fuc#?!%&! transformation for long-term 2D localization correction
  * Created on 7 de mayo de 2011, 12:08 PM
  */
 

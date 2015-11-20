@@ -5,7 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="GPSUtils" projectFiles="true">
-        <itemPath>NMEAParseGPRMC.h</itemPath>
+        <itemPath>NMEAParseGPRMCGGA.h</itemPath>
         <itemPath>PosCoordTransform.h</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -17,7 +17,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="GPSUtils" projectFiles="true">
-        <itemPath>NMEAParseGPRMC.c</itemPath>
+        <itemPath>NMEAParseGPRMCGGA.c</itemPath>
         <itemPath>PosCoordTransform.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
@@ -44,9 +44,9 @@
       </toolsSet>
       <compileType>
       </compileType>
-      <item path="NMEAParseGPRMC.c" ex="false" tool="0" flavor2="0">
+      <item path="NMEAParseGPRMCGGA.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="NMEAParseGPRMC.h" ex="false" tool="3" flavor2="0">
+      <item path="NMEAParseGPRMCGGA.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="PosCoordTransform.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -75,9 +75,9 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="NMEAParseGPRMC.c" ex="false" tool="0" flavor2="0">
+      <item path="NMEAParseGPRMCGGA.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="NMEAParseGPRMC.h" ex="false" tool="3" flavor2="0">
+      <item path="NMEAParseGPRMCGGA.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="PosCoordTransform.c" ex="false" tool="0" flavor2="0">
       </item>
