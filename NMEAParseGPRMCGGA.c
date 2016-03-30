@@ -7,6 +7,8 @@
 
 #include "NMEAParseGPRMCGGA.h"
 
+volatile GPSISRBufferDataHandler_t GPSFrameISRData={{0}, 0, ISR_GPSISR_IDLE, {0}};
+
 /*============================================================================*/
 unsigned char GPRMCGetStatus(GPRMCInfoIndex_t *infoobj){
     return infoobj->Data[1][0];
@@ -174,3 +176,29 @@ int ParseNMEAFrameGPGGA(GPGGAInfoIndex_t *obj,  const char *buffer){
     }
     else return -1;
 }
+/*============================================================================*/
+void GPSISRHandler(char RxChar){
+    if(GPSFrameISRData.State == ISR_GPSISR_READY) return;
+    if(RxChar == '$'){
+    	GPSFrameISRData.State  = ISR_GPSISR_PROCESSING;
+    	GPSFrameISRData.Index = 0;
+    }
+    if(GPSFrameISRData.State = ISR_GPSISR_PROCESSING){
+    	GPSFrameISRData.Buffer[GPSFrameISRData.Index] = RxChar;
+    	GPSFrameISRData.Index++;
+    	GPSFrameISRData.Buffer[GPSFrameISRData.Index] = 0x00;
+    	if(RxChar == '\n') GPSFrameISRData.State = ISR_GPSISR_READY;
+    }
+}
+/*============================================================================*/
+char* GPSGetNMEAFrame(void){
+    if (GPSFrameISRData.State == ISR_GPSISR_READY){
+        memset((void*)GPSFrameISRData.IsolatedBuffer, 0x00, sizeof(GPSFrameISRData.IsolatedBuffer));
+        strcpy((char*)GPSFrameISRData.IsolatedBuffer, (const char *)GPSFrameISRData.Buffer);
+        memset((void*)GPSFrameISRData.Buffer, 0x00, sizeof(GPSFrameISRData.Buffer));
+        GPSFrameISRData.State = ISR_GPSISR_IDLE;
+        return (char*)GPSFrameISRData.IsolatedBuffer;
+    }
+    else return NULL;
+}
+/*============================================================================*/

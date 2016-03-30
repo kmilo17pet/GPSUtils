@@ -102,6 +102,23 @@ typedef struct{
     float HeightOfGeoid;
 }GPGGAFixData;
 
+/* ISR Handler ---------------------------------------------------------------*/
+#define GPS_MAX_BUFFER_SIZE		512
+typedef struct{
+    volatile char Buffer[GPS_MAX_BUFFER_SIZE];
+    volatile unsigned int Index;
+    volatile unsigned char State;
+    char IsolatedBuffer[120];
+}GPSISRBufferDataHandler_t;
+#define ISR_GPSISR_IDLE         0
+#define ISR_GPSISR_PROCESSING   1
+#define ISR_GPSISR_READY        2
+extern volatile GPSISRBufferDataHandler_t GPSFrameISRData;
+
+void GPSISRHandler(char RxChar);
+char* GPSGetNMEAFrame(void);
+/*----------------------------------------------------------------------------*/
+
 int GPRMCGetPosition(GPSPositionData *datobj, GPRMCInfoIndex_t *infoobj);
 int GPGGAGetPosition(GPSPositionData *datobj, GPGGAInfoIndex_t *infoobj);
 int GPGGAGetFixData(GPGGAFixData *dataobj, GPGGAInfoIndex_t *infoobj);
