@@ -64,20 +64,20 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gpsutils.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gpsutils ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/NMEAParseGPRMCGGA.o: NMEAParseGPRMCGGA.c 
+${OBJECTDIR}/NMEAParseGPRMCGGA.o: NMEAParseGPRMCGGA.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/NMEAParseGPRMCGGA.o NMEAParseGPRMCGGA.c
+	$(COMPILE.c) -g -Wall -DNMEA_USE_GGA -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/NMEAParseGPRMCGGA.o NMEAParseGPRMCGGA.c
 
-${OBJECTDIR}/PosCoordTransform.o: PosCoordTransform.c 
+${OBJECTDIR}/PosCoordTransform.o: PosCoordTransform.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/PosCoordTransform.o PosCoordTransform.c
+	$(COMPILE.c) -g -Wall -DNMEA_USE_GGA -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/PosCoordTransform.o PosCoordTransform.c
 
-${OBJECTDIR}/main.o: main.c 
+${OBJECTDIR}/main.o: main.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.c
+	$(COMPILE.c) -g -Wall -DNMEA_USE_GGA -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.c
 
 # Subprojects
 .build-subprojects:
@@ -85,7 +85,6 @@ ${OBJECTDIR}/main.o: main.c
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gpsutils.exe
 
 # Subprojects
 .clean-subprojects:

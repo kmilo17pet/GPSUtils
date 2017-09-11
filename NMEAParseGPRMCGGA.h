@@ -1,6 +1,6 @@
 /* 
  * File:   NMEAParser.h
- * Author: Ing. Juan Camilo GÃ³mez Cadavid MSc.
+ * Author: Ing. Juan Camilo GÃƒÂ³mez Cadavid MSc.
  * 
  * Created on 7 de abril de 2011, 04:39 PM
  */
@@ -13,11 +13,14 @@ extern "C" {
 #endif
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
+#include <stdlib.h>
 /*
 GPRMC INFO:
 */
-
+#define NMEA_EXTENDEDINFO
     
+#define GPS_BUFFER_ISOLATION
     
 #define TRMC    "$GPRMC,"
 #define TGGA    "$GPGGA,"    
@@ -48,15 +51,18 @@ eg. 16708.033 is 167 degrees and 8.033 minutes. ".033" of a minute is about 2 se
 #define _GPS_NMEA_GPGGA_AMOUNT_OF_DATA_     13   
 
 
-
+#ifdef NMEA_USE_GGA
 typedef struct{
     char *Data[_GPS_NMEA_GPGGA_AMOUNT_OF_DATA_+1];
     size_t Size[_GPS_NMEA_GPGGA_AMOUNT_OF_DATA_+1];
 }GPGGAInfoIndex_t;  
 int ParseNMEAFrameGPGGA(GPGGAInfoIndex_t *obj,  const char *buffer);    
+#endif
 typedef struct{
     char *Data[_GPS_NMEA_GPRMC_AMOUNT_OF_DATA_+1];
     size_t Size[_GPS_NMEA_GPRMC_AMOUNT_OF_DATA_+1];
+    unsigned char indexinit;
+    unsigned char indexend;
 }GPRMCInfoIndex_t;  
 int ParseNMEAFrameGPRMC(GPRMCInfoIndex_t *obj,  const char *buffer);
 
@@ -76,6 +82,7 @@ typedef struct{
     float SpeedKmh;
 }GPRMCSpeedData;
 
+#ifdef NMEA_EXTENDEDINFO
 typedef struct{
     unsigned char Day;
     unsigned char Month;
@@ -85,7 +92,7 @@ typedef struct{
 typedef struct{
     unsigned char Hour;
     unsigned char Minute;
-    float Seconds;
+    unsigned char Seconds;
 }GPRMCTimeOfFix;
 
 typedef struct{
@@ -101,37 +108,68 @@ typedef struct{
     float Altitude;
     float HeightOfGeoid;
 }GPGGAFixData;
+#endif
 
 /* ISR Handler ---------------------------------------------------------------*/
-#define GPS_MAX_BUFFER_SIZE		512
+#define GPS_MAX_BUFFER_SIZE		150
 typedef struct{
     volatile char Buffer[GPS_MAX_BUFFER_SIZE];
     volatile unsigned int Index;
     volatile unsigned char State;
-    char IsolatedBuffer[120];
+    #ifdef GPS_BUFFER_ISOLATION
+    char IsolatedBuffer[GPS_MAX_BUFFER_SIZE];
+    #endif
 }GPSISRBufferDataHandler_t;
 #define ISR_GPSISR_IDLE         0
 #define ISR_GPSISR_PROCESSING   1
 #define ISR_GPSISR_READY        2
+#define ISR_GPSISR_STG1         3
+#define ISR_GPSISR_STG2         4
+#define ISR_GPSISR_CHKSTR       5
 extern volatile GPSISRBufferDataHandler_t GPSFrameISRData;
+extern volatile GPSISRBufferDataHandler_t *GPSISRptr;
 
-void GPSISRHandler(char RxChar);
+unsigned char GPSISRHandler(char RxChar);
+void GPSISRHandlerX(char RxChar, const char *strmatch, int n);
 char* GPSGetNMEAFrame(void);
 /*----------------------------------------------------------------------------*/
 
 int GPRMCGetPosition(GPSPositionData *datobj, GPRMCInfoIndex_t *infoobj);
+
+#ifdef NMEA_USE_GGA
 int GPGGAGetPosition(GPSPositionData *datobj, GPGGAInfoIndex_t *infoobj);
 int GPGGAGetFixData(GPGGAFixData *dataobj, GPGGAInfoIndex_t *infoobj);
+#endif
 
 unsigned char GPRMCGetStatus(GPRMCInfoIndex_t *infoobj);
-unsigned char GPRMCGetCheckSum(GPRMCInfoIndex_t *infoobj);
-int GPRMCGetSpeed(GPRMCSpeedData *datobj, GPRMCInfoIndex_t *infoobj);
 
+#ifdef NMEA_EXTENDEDINFO
+unsigned char GPRMCGetCheckSum(GPRMCInfoIndex_t *infoobj);
 int GPRMCGetTimeOfFix(GPRMCTimeOfFix *dataobj, GPRMCInfoIndex_t *infoobj);
 int GPRMCGetDate(GPRMCDateData *dataobj, GPRMCInfoIndex_t *infoobj);
 int GPRMCGetOtherInfo(GPRMCOtherInfo *dataobj, GPRMCInfoIndex_t *infoobj);
+#endif
+int GPRMCGetSpeed(GPRMCSpeedData *datobj, GPRMCInfoIndex_t *infoobj);
 
+#ifdef GPS_BUFFER_ISOLATION
 char* GPRMCFrameIsolate(char *buffer, char *type);
+#endif
+
+unsigned char ValidateGPRMCCheckSUM(GPRMCInfoIndex_t *obj, const char *buffer);
+
+#define USE_SOFTWARE_ATOF
+
+
+#ifdef USE_SOFTWARE_ATOF
+int ipow(int base, int exp);
+int numPlaces(int n);
+double satof(const char *str);
+#endif
+
+#ifndef USE_SOFTWARE_ATOF
+#define satof(_x_)  atof(_x_)          
+#endif
+
 
 #define GPS_INTERNAL_BUFFER_SIZE    10
 
